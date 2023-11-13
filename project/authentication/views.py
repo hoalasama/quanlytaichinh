@@ -4,6 +4,10 @@ import json
 from django.http import JsonResponse
 from django.contrib.auth.models import User
 from validate_email import validate_email
+from django.contrib import messages
+from django.urls import reverse
+from django.contrib import auth
+from django.shortcuts import redirect
 # Create your views here.
 
 class EmailValidationView(View):
@@ -29,3 +33,52 @@ class UsernameValidationView(View):
 class RegistrationView(View):
     def get(self, request):
         return render(request, 'authentication/register.html')
+    
+    def post(self, request):
+        username=request.POST['username']
+        email=request.POST['email']
+        password=request.POST['password']
+
+        context = {
+            'fieldValues':request.POST
+        }
+
+        if not User.objects.filter(username=username).exists():
+            if not User.objects.filter(email=email).exists():
+                if len(password) < 6:
+                    messages.error(request, 'password too short')
+                    return render(request, 'authentication/register.html', context)
+                
+                user = User.objects.create_user(username=username,email=email)
+                user.set_password(password)
+                user.save()
+                messages.success(request, 'Account created')
+                return render(request, 'authentication/register.html')
+
+        return render(request, 'authentication/register.html')
+class LoginView(View):
+    def get(self, request):
+        return render(request, 'authentication/login.html')
+    
+    def post(self, request):
+        username=request.POST['username']
+        password=request.POST['password']
+
+        if username and password:
+            user = auth.authenticate(username=username, password=password) 
+
+            if user:
+                auth.login(request, user)
+                messages.success(request, 'welcome, '+user.username) 
+                return redirect('expenses')
+
+            messages.error(request, 'wrong username or password ?')       
+            return render(request, 'authentication/login.html')
+        messages.error(request, 'enter something ?')       
+        return render(request, 'authentication/login.html')
+    
+class LogoutView(View):
+    def post(self, request):
+        auth.logout(request)
+        messages.success(request, 'you have been logged out')
+        return redirect('login')
