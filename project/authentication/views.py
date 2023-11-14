@@ -64,6 +64,10 @@ class LoginView(View):
         username=request.POST['username']
         password=request.POST['password']
 
+        context = {
+            'fieldValues': request.POST
+        }
+
         if username and password:
             user = auth.authenticate(username=username, password=password) 
 
@@ -73,9 +77,9 @@ class LoginView(View):
                 return redirect('expenses')
 
             messages.error(request, 'wrong username or password ?')       
-            return render(request, 'authentication/login.html')
-        messages.error(request, 'enter something ?')       
-        return render(request, 'authentication/login.html')
+            return render(request, 'authentication/login.html', context)
+        messages.error(request, 'please enter both fields ')       
+        return render(request, 'authentication/login.html', context)
     
 class LogoutView(View):
     def post(self, request):
