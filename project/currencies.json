@@ -1,4 +1,6 @@
 {
     "VND": "Dong",
-    "USD": "Dollar"
+    "USD": "Dollar",
+    "EUR": "Euro",
+    "JPY": "Yen"
 }

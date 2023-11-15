@@ -31,7 +31,6 @@ emailField.addEventListener('keyup', (e) => {
         })
             .then((res) => res.json())
             .then((data) => {
-                console.log("data", data);
                 if (data.email_error) {
                     submitBtn.disabled = true;
                     emailField.classList.add("is-invalid");

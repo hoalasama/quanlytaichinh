@@ -15,9 +15,6 @@
             <h4>Register</h4>
           </div>
 
-          
-
-
           <form action="{% url 'register' %}" method="post">
             {% csrf_token %}
             {% include 'partials/_messages.html' %}

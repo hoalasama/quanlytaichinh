@@ -17,7 +17,7 @@ class EmailValidationView(View):
         if not validate_email(email):
             return JsonResponse({'email_error':'email is invalid'},status=400)
         if User.objects.filter(email=email).exists():
-            return JsonResponse({'username_error':'email is in use'},status=409)
+            return JsonResponse({'email_error':'email is in use'},status=409)
         return JsonResponse({'email_valid': True})
     
 class UsernameValidationView(View):
@@ -47,8 +47,7 @@ class RegistrationView(View):
             if not User.objects.filter(email=email).exists():
                 if len(password) < 6:
                     messages.error(request, 'password too short')
-                    return render(request, 'authentication/register.html', context)
-                
+                    return render(request, 'authentication/register.html', context)                
                 user = User.objects.create_user(username=username,email=email)
                 user.set_password(password)
                 user.save()

@@ -3,17 +3,24 @@
 <div class="containter mt-4" >
 
 
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="{% url 'expenses' %}">Expenses</a></li>
-          <li class="breadcrumb-item active" aria-current="page">Add expenses</li>
-        </ol>
-    </nav>
+<div class="row">
+    <div class="col-md-10">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{% url 'expenses' %}">Expenses</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Edit expenses</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="col-md-2">
+        <a href="{% url 'expense-delete' expense.id %}" class="btn btn-danger btn-sm">Delete</a>
+    </div>
+</div>
 
     
 <div class="card">
     <div class="card-body">
-        <form action="{% url 'add-expenses' %}" method="post">
+        <form action="{% url 'expense-edit' expense.id %}" method="post">
             {% include 'partials/_messages.html' %}
             {% csrf_token %}
             <div class="form-group">
@@ -29,6 +36,7 @@
             <div class="form-group">
                 <label for="">Category</label>
                 <select class="form-control" name="category">
+                    <option selected name="category" value="{{values.category}}">{{values.category}}</option>
                     {% for category in categories %}
                     <option name="category" value="{{category.name}}">{{category.name}}</option>
                     {% endfor %}
@@ -37,10 +45,10 @@
 
             <div class="form-group">
                 <label for="">Date of Expense</label>
-                <input type="date" class="form-control form-control-sm" name="expense_date" value="{{ default_date }}">
+                <input type="date" class="form-control form-control-sm" name="expense_date" value="{{ values.date }}">
             </div>
 
-            <input type="submit" value="Submit" class="btn btn-primary btn-primary-sm">
+            <input type="submit" value="Save" class="btn btn-primary btn-primary-sm">
         </form>
     </div>
 </div>

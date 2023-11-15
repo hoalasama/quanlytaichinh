@@ -2,23 +2,64 @@
 
 {% block content %}
 
-<div class="container">
-    {% include 'partials/_messages.html' %}
-    <h1>Expenses list</h1>
+<div class="container mt-4">
+    
+    <div class="row" >
+        <div class="col-md-10" style=" padding-top: 10px;">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item">
+                    <a href="">Expenses</a>
+                  </li>
+                  <li class="breadcrumb-item active" aria-current="page">My expenses</li>
+                </ol>
+            </nav>
+        </div>
+    
+        <div class="col-md-2">
+            <a href="{% url 'add-expenses' %}" class="btn btn-primary">Add expense</a>
+        </div>
+    </div>
 
-    <ul class="list-group">
-        <li class="list-group-item">Bought beer</li>
-        <li class="list-group-item">Bought beer</li>
-        <li class="list-group-item">Bought beer</li>
-        <li class="list-group-item">Bought beer</li>
-        <li class="list-group-item">Bought beer</li>
-        <li class="list-group-item">Bought beer</li>
-        <li class="list-group-item">Bought beer</li>
-        <li class="list-group-item">Bought beer</li>
-        <li class="list-group-item">Bought beer</li>
-        <li class="list-group-item">Bought beer</li>   
-    </ul>
+    <div class="container">
+        {% if expenses.count %}
+
+        <table class="table table-stripped table-hover">
+            <thead>
+                <tr>
+                    <th>Amount (CURRENCY)</th>
+                    <th>Category</th>
+                    <th>Description</th>
+                    <th>Date</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for expense in expenses %}
+                <tr>
+                    <td>{{expense.amount}}</td>
+                    <td>{{expense.category}}</td>
+                    <td>{{expense.description}}</td>
+                    <td>{{expense.date}}</td>
+                    <td><a href="{% url 'expense-edit' id=expense.id %}" class="btn btn-secondary btn-sm">Edit</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% endif %}
+    </div>
+
+
 </div>
 
 
+<style>
+    .container {
+        margin-bottom: 20px;
+    }
+</style>
+
+{% include 'partials/_messages.html' %}
 {% endblock content %}
