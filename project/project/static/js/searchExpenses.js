@@ -45,5 +45,6 @@ searchField.addEventListener('keyup', (e)=>{
         appTable.style.display = "block";
         paginationContainer.style.display = "block";
         tableOutput.style.display = "none";
+        tableBody.innerHTML = ""
     }
 });

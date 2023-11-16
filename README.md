@@ -24,3 +24,18 @@ idea:
 ***
 12. 
 ***
+how to run the website:
+su : root 
+pass : normal pass
+```
+virtualenv env
+```
+```
+env\scripts\activate
+```
+```
+cd project
+```
+```
+py manage.py runserver
+```
