@@ -38,6 +38,7 @@ def index(request):
     return render(request, 'expenses/index.html', context)
 
 
+@login_required(login_url='/authentication/login')
 def add_expense(request):
     categories = Category.objects.all()
     default_date = dt.today() 
