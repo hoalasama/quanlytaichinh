@@ -4,7 +4,7 @@ from django.utils.timezone import now
 # Create your models here.
 
 class UserIncome(models.Model):
-    amount = models.FloatField()
+    amount = models.DecimalField(max_digits=20, decimal_places=2)
     date = models.DateField(default=now)
     description = models.TextField()
     owner = models.ForeignKey(to=User, on_delete=models.CASCADE)

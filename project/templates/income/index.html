@@ -2,6 +2,8 @@
 
 {% load static %}
 
+{% load humanize %}
+
 {% block content %}
 
 <div class="container mt-4">
@@ -49,7 +51,7 @@
                 <tbody>
                     {% for income in page_obj %}
                     <tr>
-                        <td>{{income.amount}}</td>
+                        <td>{{income.amount | floatformat | intcomma}}</td>
                         <td>{{income.source}}</td>
                         <td>{{income.description}}</td>
                         <td>{{income.date|date:"Y-m-d"}}</td>
@@ -99,6 +101,10 @@
                     {% endif %}
                 </ul>
             </div>
+            <br>
+            <p style="margin-bottom: 0px">Income: {{ total_incomes | floatformat | intcomma }}</p>
+            <p style="margin-bottom: 0px">Tax: {{ tax | floatformat | intcomma }}</p>
+            <p>Left over: {{ left_over | floatformat | intcomma }}</p>
             {% endif %}
         </div> 
     </div>

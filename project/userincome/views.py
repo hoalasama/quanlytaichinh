@@ -8,6 +8,9 @@ from django.contrib import messages
 from django.http import JsonResponse
 import json
 import datetime
+from django.db.models import Sum
+from decimal import Decimal
+from expenses.models import Expense
 # Create your views here.
 
 
@@ -22,6 +25,32 @@ def search_income(request):
         data = income.values()
         return JsonResponse(list(data), safe=False)
 
+def calculate_tax(request):
+    total_income = UserIncome.objects.filter(owner=request.user).aggregate(Sum('amount'))['amount__sum']
+
+    total_income = max(total_income, 0) if total_income is not None else 0
+
+    total_income = Decimal(total_income)
+
+    if total_income <= 5000000:
+        tax = total_income * Decimal('0.05')
+    elif total_income <= 10000000:
+        tax = total_income * Decimal('0.1') - Decimal('250000')
+    elif total_income <= 18000000:
+        tax = total_income * Decimal('0.15') - Decimal('750000')
+    elif total_income <= 32000000:
+        tax = total_income * Decimal('0.2') - Decimal('1650000')
+    elif total_income <= 52000000:
+        tax = total_income * Decimal('0.25') - Decimal('3250000')
+    elif total_income <= 80000000:
+        tax = total_income * Decimal('0.3') - Decimal('5850000')
+    else:
+        tax = total_income * Decimal('0.35') - Decimal('9850000')
+
+    tax = round(tax, 2)
+
+    return tax  
+
 @login_required(login_url='/authentication/login')
 def index(request):
     categories = Source.objects.all()
@@ -30,10 +59,23 @@ def index(request):
     page_number = request.GET.get('page')
     page_obj = Paginator.get_page(paginator, page_number)
     currency = UserPreference.objects.get(user=request.user).currency
+    tax = calculate_tax(request)
+
+    total_incomes = UserIncome.objects.filter(owner=request.user).aggregate(Sum('amount'))['amount__sum']
+    total_incomes = Decimal(total_incomes)
+
+    total_expenses = Expense.objects.filter(owner=request.user).aggregate(Sum('amount'))['amount__sum']
+    total_expenses = Decimal(total_expenses) if total_expenses is not None else Decimal('0.00')
+    
+    left_over = total_incomes - total_expenses - tax
+    
     context = {
         'income': income,
         'page_obj': page_obj,
         'currency': currency,
+        'tax': tax,
+        'total_incomes': total_incomes,
+        'left_over': left_over,
     }
     return render(request, 'income/index.html', context)
 

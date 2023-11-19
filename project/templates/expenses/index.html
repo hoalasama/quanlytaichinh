@@ -2,6 +2,8 @@
 
 {% load static %}
 
+{% load humanize %}
+
 {% block content %}
 
 <div class="container mt-4">
@@ -27,8 +29,15 @@
         {% if expenses.count %}
         
         <div class="row">
-            <div class="col-md-8"></div>
+            <div class="col-md-8">
+                <a href="{% url 'export-pdf' %}" class="btn btn-info">Export PDF</a>
+                <a href="{% url 'export-excel' %}" class="btn btn-primary">Export Excel</a>
+                <a href="{% url 'export-csv' %}" class="btn btn-secondary">Export CSV</a>
+
+            </div>
             <div class="col-md-4">
+
+                
                 <div class="form-group">
                     <input type="text" class="form-control" id="searchField" placeholder="Search">
                 </div>
@@ -49,7 +58,7 @@
                 <tbody>
                     {% for expense in page_obj %}
                     <tr>
-                        <td>{{expense.amount}}</td>
+                        <td>{{expense.amount | floatformat | intcomma}}</td>
                         <td>{{expense.category}}</td>
                         <td>{{expense.description}}</td>
                         <td>{{expense.date|date:"Y-m-d"}}</td>
@@ -99,6 +108,7 @@
                     {% endif %}
                 </ul>
             </div>
+            <p>Total: {{total_expenses | floatformat | intcomma}}</p>
             {% endif %}
         </div>
     </div>
