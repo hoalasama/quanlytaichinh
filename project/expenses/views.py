@@ -203,6 +203,8 @@ def export_excel(request):
         for col_num in range(len(row)):
             if columns[col_num] == 'Amount':
                 ws.write(row_num, col_num, row[col_num], number_style)
+            elif columns[col_num] == 'Date':
+                ws.write(row_num, col_num, row[col_num].strftime('%Y-%m-%d'), default_style)
             else:
                 ws.write(row_num, col_num, row[col_num], default_style)
 

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Output</title>
+
+    <style>
+        @page{
+            size:"A4";
+            margin: 2.5cm 1.5cm 3.5cm 1.5cm;
+
+            @top-center{
+                content: "Income";
+                font-size: 20px;
+                font-weight: bold;
+            }
+
+        @bottom-right{
+            content: "Page" counter(page) " of " counter(pages);
+        }
+        }
+
+
+    </style>
+</head>
+<body>
+    {% load humanize %}
+    <table class="table">
+        <thead class="thead">
+            <tr>
+                <th>No</th>
+                <th>Amount</th>
+                <th>Category</th>
+                <th>Source</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for expense in expenses %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ expense.amount | floatformat | intcomma }}</td>
+                <td>{{ expense.source}}</td>
+                <td>{{ expense.description}}</td>
+                <td>{{ expense.date}}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td>Total</td>
+                <td>{{total | floatformat | intcomma}}</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

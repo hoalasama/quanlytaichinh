@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'expenses',
     'userpreferences',
     'userincome',
+    'stocks',
     'django.contrib.humanize',
 ]
 

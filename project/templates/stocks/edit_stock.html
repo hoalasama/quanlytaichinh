@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="row">
+    <div class="col-md-10">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{% url 'stock_result' %}">Stocks</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Edit buy</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="col-md-2">
+        <a href="{% url 'delete_stock' stock.id %}" class="btn btn-danger btn-sm">Delete</a>
+    </div>
+</div>
+
+
+<form method="post" action="{% url 'edit_stock' stock.id %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary btn-sm">Save Changes</button>
+    <a href="{% url 'stock_result' %}" class="btn btn-secondary btn-sm">Cancel</a>
+</form>
+{% endblock content %}

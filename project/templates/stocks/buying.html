@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+
+<div class="row">
+    <div class="col-md-10">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{% url 'stock_result' %}">Stock</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Buying income</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="col-md-2">
+        {% comment %} <a href="{% url 'income-delete' income.id %}" class="btn btn-danger btn-sm">Delete</a> {% endcomment %}
+    </div>
+</div>
+
+
+<div class="card">
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="symbol">Stock Symbol:</label>
+                <input type="text" id="symbol" name="symbol" placeholder="Enter stock symbol" required>
+            </div>
+
+            <div class="form-group">
+                <label for="quantity">Quantity:</label>
+                <input type="number" id="quantity" name="quantity" placeholder="Enter quantity" required>
+            </div>
+
+            <div>
+                <label for="purchase_price">Purchase Price:</label>
+                <input type="number" id="purchase_price" name="purchase_price" placeholder="Enter purchase price" required>
+            </div>
+            <button type="submit" style="margin-top:20px">Simulate Purchase</button>
+        </form>
+    </div>
+</div>
+
+<style>
+    .form-group{
+        margin-bottom: 15px;
+    }
+</style>
+{% endblock content %}
+
+
+
+

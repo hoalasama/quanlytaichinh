@@ -29,7 +29,11 @@
         {% if income.count %}
         
         <div class="row">
-            <div class="col-md-8"></div>
+            <div class="col-md-8">
+                <a href="{% url 'income-export-pdf' %}" class="btn btn-info">Export PDF</a>
+                <a href="{% url 'income-export-excel' %}" class="btn btn-primary">Export Excel</a>
+                <a href="{% url 'income-export-csv' %}" class="btn btn-secondary">Export CSV</a>
+            </div>
             <div class="col-md-4">
                 <div class="form-group">
                     <input type="text" class="form-control" id="searchField" placeholder="Search">
@@ -85,7 +89,7 @@
 
             <div class="pagi">
                 <div class="col-md-8">
-                    Showing page {{page_obj.number}} or {{page_obj.paginator.num_pages}}
+                    Showing page {{page_obj.number}} of {{page_obj.paginator.num_pages}}
                 </div>
             
 
