@@ -1,6 +1,59 @@
 {% extends "base.html" %}
 {% block content %}
 
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        function updateLossGain(row) {
+            var purchasePrice = parseFloat(row.find('.purchase-price').text());
+            var realTimePrice = parseFloat(row.find('.real-time-price').text());
+
+            var lossGain = realTimePrice - purchasePrice;
+            var lossGainPercent = (lossGain / purchasePrice) * 100;
+
+            var lossGainCell = row.find('.loss-gain-percent');
+            lossGainCell.text(lossGainPercent.toFixed(2) + '%');
+
+            if (lossGain < 0) {
+                lossGainCell.css('color', 'red');
+            } else {
+                lossGainCell.css('color', 'green');
+            }
+        }
+
+        $('tbody tr').each(function() {
+            updateLossGain($(this));
+        });
+
+        var totalPurchaseValue = 0;
+        var totalCurrentValue = 0;
+
+        $('tbody tr').each(function() {
+            var quantity = parseInt($(this).find('.quantity').text());
+            var purchasePrice = parseFloat($(this).find('.purchase-price').text());
+            var realTimePrice = parseFloat($(this).find('.real-time-price').text());
+
+            totalPurchaseValue += quantity * purchasePrice;
+            totalCurrentValue += quantity * realTimePrice;
+            
+        });
+
+        $('.total-purchase-value').text(totalPurchaseValue.toFixed(2));
+        $('.total-current-value').text(totalCurrentValue.toFixed(2));
+
+        var totalLossGain = totalCurrentValue - totalPurchaseValue;
+        var totalLossGainPercent = (totalLossGain / totalPurchaseValue) * 100;
+
+        $('.total-loss-gain').text(totalLossGainPercent.toFixed(2) + '%');
+
+        if (totalLossGain < 0) {
+            $('.total-loss-gain').css('color', 'red');
+        } else {
+            $('.total-loss-gain').css('color', 'green');
+        }
+    });
+</script>
 <h1>Simulation Result</h1>
 
 <table border="1" class="table table-stripped table-hover">
@@ -10,14 +63,18 @@
             <th>Quantity</th>
             <th>Purchase Price</th>
             <th>Real-Time Price</th>
+            <th>Loss/Gain Percent</th>
+            
     </thead>
     <tbody>
         {% for result in results %}
             <tr>
                 <td>{{ result.symbol }}</td>
-                <td>{{ result.quantity }}</td>
-                <td>{{ result.purchase_price }}</td>
-                <td>{{ result.real_time_price }}</td>
+                <td class="quantity">{{ result.quantity }}</td>
+                <td class="purchase-price">{{ result.purchase_price }}</td>
+                <td class="real-time-price">{{ result.real_time_price }}</td>
+                <td class="loss-gain-percent"></td>
+
                 <td>
                     {% if result.id %}
                         <a href="{% url 'edit_stock' result.id %}" class="btn btn-primary btn-sm">Edit</a>
@@ -29,7 +86,9 @@
         {% endfor %}
     </tbody>
 </table>
-
+    <div>Total purchase: <span class="total-purchase-value">{{ total_purchase_value|floatformat:2 }}</span></div>
+    <div>Total now: <span class="total-current-value">{{ total_current_value|floatformat:2 }}</span></div>
+    <div>Total Loss/Gain: <span class="total-loss-gain"></span></div>
     <a href="{% url 'simulate_purchase' %}">Simulate Another Purchase</a>
 
 {% include 'partials/_messages.html' %}
