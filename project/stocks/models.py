@@ -11,3 +11,6 @@ class StockPurchase(models.Model):
 
     def __str__(self):
         return f"{self.owner.username} - {self.symbol} - {self.purchase_date}"
+    
+    class Meta:
+        ordering : ['-purchase_date']

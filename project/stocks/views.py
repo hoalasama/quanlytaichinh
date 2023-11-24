@@ -23,7 +23,7 @@ def stock_info(request):
 def stock_result(request):
     api_key = 'clbolp1r01qp535t0pigclbolp1r01qp535t0pj0'
 
-    stock_purchases = StockPurchase.objects.filter(owner=request.user)
+    stock_purchases = StockPurchase.objects.filter(owner=request.user).order_by('-purchase_date')
     comparison_results = []
 
     for purchase in stock_purchases:
